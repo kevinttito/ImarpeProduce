@@ -140,11 +140,43 @@ merge_callas_tallas = function(calas, tallas_calas){
 
   tallas_calas_limpias = tratar_tallas_calas(tallas_calas = tallas_calas)
 
-  tallas_lance = merge(calas_limpias, tallas_calas_limpias, by = c("id_faena","n_cala","description"),all = TRUE)
+  tallas_lance = merge(calas_limpias, tallas_calas_limpias, by = c("id_faena","n_cala","description"), all = TRUE)
 
   return(tallas_lance)
 
 }
+
+
+# Descarga ----------------------------------------------------------------
+
+
+tratamiento_descargas = function(data_descarga, ports = c("Callao","Malabrigo","Chimbote","Coishco", "Chancay", "Tambo de Mora","Paracas (Pisco)", "Samanco","Supe", "Bayovar","Carqu¡n","Vegueta")){
+
+  names(data_descarga) = c("region","puerto","id_planta","fabrica","localidad","armador","emb","matricula","acta_des","F_ini_desembarque","F_fin_desembarque","act_descarga","F_ini_descarga","F_fin_descarga","cb","tm_declarada","descarga","n_report","parte_muestreo","n_juv","por_juv","moda","por_moda","id_faena")
+
+
+  data_descarga = data_descarga %>% dplyr::filter(puerto %in% ports) %>% mutate(id_matricula = removeSpace_Letter(matricula), puerto = tolower(puerto)) %>% select(puerto, emb, id_matricula, F_ini_desembarque, F_fin_desembarque, F_ini_descarga, F_fin_descarga, cb, tm_declarada, descarga, id_faena)
+
+  return(data_descarga)
+
+}
+
+
+# Pre Tratamiento de tallas -----------------------------------------------
+
+pre_trat_tallas_viaje = function(tallas_viaje, marcas  = seq(5,20,0.5)){
+
+  names(tallas_viaje) = c("region","puerto","emb","matricula","fecha_descarga","descarga","id_faena",marcas,"moda","obs")
+
+  tallas_viaje = tallas_viaje %>% mutate(id_matricula = removeSpace_Letter(matricula), puerto = tolower(puerto)) %>% select(region, id_matricula, descarga, id_faena, as.character(marcas))
+
+  tallas_viaje = obtener_solo_muestra(tallas_viaje)
+
+  return(tallas_viaje)
+
+}
+
+
 
 
 
