@@ -43,7 +43,6 @@ read_calas = function(path, pattern = ".csv",...) {
 
   list_calas = list.files(path = path, pattern = pattern, full.names = TRUE, ...)
 
-
   tablas_calas = lapply(list_calas, read.csv, skip = 5, fileEncoding = "latin1", stringsAsFactors = FALSE, header = FALSE)
 
   tablas_calas = do.call("rbind", tablas_calas)
@@ -66,7 +65,6 @@ read_calas = function(path, pattern = ".csv",...) {
 read_tallas_calas = function(path, pattern = ".csv", ...){
 
   list_calas_tallas = list.files(path = path, pattern = pattern, full.names = TRUE, ...)
-
 
   tablas_calas_tallas = lapply(list_calas_tallas, read.csv, skip = 5, fileEncoding = "latin1", stringsAsFactors = FALSE, header = FALSE)
 
@@ -115,12 +113,38 @@ tratar_calas = function(calas){
 
 
 
+# Tratar Tallas Calas -----------------------------------------------------
 
 
+tratar_tallas_calas = function(tallas_calas){
+
+  tallas_calas = tallas_calas %>% dplyr::filter(!is.na(n_cala))
+
+  tallas_calas$n = 1:nrow(tallas_calas)
+
+  tallas_calas = tallas_calas %>% select(n, id_faena, n_cala, description, length, freq)
+
+  tallas_calas = tallas_calas %>% select(-"n") %>% spread("length","freq")
+
+  return(tallas_calas)
+
+}
 
 
+# Uniendo calas a tallas calas --------------------------------------------
 
 
+merge_callas_tallas = function(calas, tallas_calas){
+
+  calas_limpias = tratar_calas(calas = calas)
+
+  tallas_calas_limpias = tratar_tallas_calas(tallas_calas = tallas_calas)
+
+  tallas_lance = merge(calas_limpias, tallas_calas_limpias, by = c("id_faena","n_cala","description"),all = TRUE)
+
+  return(tallas_lance)
+
+}
 
 
 
