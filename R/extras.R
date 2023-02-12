@@ -1,8 +1,6 @@
 
 # Distancia Costa ---------------------------------------------------------
 
-
-
 .shoreDistance = function(data) {
 
   grados2mn  = 60 * 180 / pi

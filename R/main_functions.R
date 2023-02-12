@@ -37,7 +37,7 @@ merge_callas_tallas = function(calas, tallas_calas){
 
 Distancia_Costa = function(data, colLon, colLat){
 
-  new_data = data[,c(colLon, colLat)]
+  new_data = data[,c(colLat, colLon)]
   data$dc = apply(new_data, 1, .shoreDistance)
   return(data)
 
@@ -47,11 +47,11 @@ Distancia_Costa = function(data, colLon, colLat){
 
 
 
-
-
-
-
-
+# pos = data.frame(lat = c(NA,-12.345,-13.234,NA),lon = c(NA,-79.345,-79.345,NA))
+#
+#
+#
+# Distancia_Costa(data = pos, colLon = 2,colLat = 1)
 
 
 
