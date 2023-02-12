@@ -40,3 +40,8 @@ tratar_tallas_calas = function(tallas_calas){
 
 }
 
+
+
+
+
+

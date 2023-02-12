@@ -1,11 +1,10 @@
 Package: ImarpeProduce
 Type: Package
-Title: What the Package Does (Title Case)
+Title: ImarpeProduce
 Version: 0.1.0
 Author: Hans Ttito
 Maintainer: Hans Ttito <kvttitos@gmail.com>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Processing functions of PRODUCE's data 
 Imports:
     stringr
 License: GPL-2

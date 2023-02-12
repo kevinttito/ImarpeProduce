@@ -1,3 +1,26 @@
+
+# Distancia Costa ---------------------------------------------------------
+
+
+
+.shoreDistance = function(data) {
+
+  grados2mn  = 60 * 180 / pi
+  grados2rad = pi/180
+
+  shore_rad = Shoreline_Peru * grados2rad
+  x_rad = data[2] * grados2rad
+  y_rad = data[1] * grados2rad
+
+  xy_rad = sin(y_rad) * sin(shore_rad$Lat)
+  yx_rad = cos(y_rad) * cos(shore_rad$Lat) * cos(shore_rad$Long - x_rad)
+  dist = min(acos(xy_rad + yx_rad)) * grados2mn
+
+  return(dist)
+
+}
+
+
 # Removiendo espacios y letras --------------------------------------------
 
 removeSpace_Letter <- function(vector) {

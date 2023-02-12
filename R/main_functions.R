@@ -32,6 +32,26 @@ merge_callas_tallas = function(calas, tallas_calas){
 
 
 
+# Calcula Distancia Costa -------------------------------------------------
+
+
+Distancia_Costa = function(data, colLon, colLat){
+
+  new_data = data[,c(colLon, colLat)]
+  data$dc = apply(new_data, 1, .shoreDistance)
+  return(data)
+
+
+
+}
+
+
+
+
+
+
+
+
 
 
 
