@@ -45,7 +45,6 @@ mcd = function (...) {
 }
 
 
-
 # Distancia Costa ---------------------------------------------------------
 
 .shoreDistance = function(data) {
@@ -65,8 +64,6 @@ mcd = function (...) {
 
 }
 
-
-
 # Calcula Distancia Costa -------------------------------------------------
 
 
@@ -77,7 +74,6 @@ Distancia_Costa = function(data, colLon, colLat){
   return(data)
 
 }
-
 
 # Convert Longitud y Latitud ----------------------------------------------
 
@@ -107,5 +103,45 @@ obtener_solo_muestra = function(x, marcas = seq(5,20,0.5)){
   return(x)
 
 }
+
+
+# Determinar_areas --------------------------------------------------------
+
+
+
+area_iso = function(data, colLon, colLat){
+
+
+  xys = st_as_sf(areas_isoparalitorales, coords=c("lon","lat"), crs = st_crs(4326))
+
+  polys = xys %>%
+    dplyr::group_by(area, grad, dc) %>%
+    dplyr::summarize(geometry = st_union(geometry)) %>%
+    st_convex_hull()
+
+  new_data = data[,c(colLon,colLat)]
+  names(new_data) = c("lon","lat")
+  new_data[is.na(new_data)] == 0
+
+  pt_S = st_as_sf(new_data, coords = c("lon","lat"), crs = st_crs(4326))
+
+  xg = apply(st_intersects(polys, pt_S, sparse = FALSE), 2,
+             function(col){as.numeric(polys[which(col),c("area","grad","dc")])[1:3]})
+
+  xg= as.data.frame(t(xg))
+  names(xg) = c("area_iso","grad_cat","dc_cat")
+
+  return(cbind(data,xg))
+
+
+}
+
+
+
+
+
+
+
+
 
 

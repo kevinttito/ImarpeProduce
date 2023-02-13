@@ -6,7 +6,7 @@ Author: Hans Ttito
 Maintainer: Hans Ttito <kvttitos@gmail.com>
 Description: Processing functions of PRODUCE's data 
 Imports:
-    stringr, Seguimiento
+    stringr, sf, dplyr
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
