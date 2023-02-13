@@ -121,7 +121,8 @@ area_iso = function(data, colLon, colLat){
 
   new_data = data[,c(colLon,colLat)]
   names(new_data) = c("lon","lat")
-  new_data[is.na(new_data)] == 0
+
+  new_data[is.na(new_data)] = 0
 
   pt_S = st_as_sf(new_data, coords = c("lon","lat"), crs = st_crs(4326))
 
