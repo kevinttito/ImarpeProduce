@@ -1,6 +1,6 @@
 # Pre Tratamiento de tallas -----------------------------------------------
 
-pre_trat_tallas_viaje = function(tallas_viaje, marcas  = seq(5,20,0.5)){
+pre_trata_tallas_viaje = function(tallas_viaje, marcas  = seq(5,20,0.5)){
 
   names(tallas_viaje) = c("region","puerto","emb","matricula","fecha_descarga","descarga","id_faena",marcas,"moda","obs")
 
