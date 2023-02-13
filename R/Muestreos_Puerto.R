@@ -18,7 +18,7 @@ pre_trata_tallas_viaje = function(tallas_viaje, marcas  = seq(5,20,0.5)){
 
 tratamiento_tallas_viaje = function(tallas_viaje, marcas = seq(5,20,0.5), nIndividuos = 500, tallaMin = 5, tallaMax = 18, nIndExtremo = 10){
 
-  tallas_viaje = pre_trat_tallas_viaje(tallas_viaje = tallas_viaje)
+  tallas_viaje = pre_trata_tallas_viaje(tallas_viaje = tallas_viaje)
   tallas_viaje = filtro_tallas_viaje(tallas_viaje = tallas_viaje, marcas = marcas, nIndividuos = nIndividuos, tallaMin = tallaMin, tallaMax = tallaMax, nIndExtremo = nIndExtremo)
 
   return(tallas_viaje)
