@@ -36,8 +36,6 @@ merge_callas_tallas = function(calas, tallas_calas){
 
 filtrando_obteniendo_esfuerzo = function(calas_tallas_Total, descargas, min_dur_calas, max_dur_calas){
 
-  library(fenix)
-
   tallas_lance = calas_tallas_Total %>% dplyr::filter(!is.na(Fstart) & !is.na(Fend)) %>% mutate(fecha_start = dmy_hm(substring(Fstart,first = 1,last = 16)), fecha_fin = dmy_hm(substring(Fend,first = 1,last = 16)), fecha_start = dmy_hm(substring(Fstart,first = 1,last = 16)), dur_calas = as.numeric(difftime(fecha_fin,fecha_start,units = "hours")),description = ifelse(gsub("[  ]*","",description) %in% "",NA,gsub("[  ]*","",description))) %>% ungroup()
 
 
@@ -61,6 +59,74 @@ filtrando_obteniendo_esfuerzo = function(calas_tallas_Total, descargas, min_dur_
 }
 
 
+# Get total efforts -------------------------------------------------------
+
+
+obtener_esfuerzo_total = function(faenas, esfuerzo_calas, min_dv = 10, max_dv = 96){
+
+  faenas_limpias = ordenar_faenas(faenas = faenas)
+
+  data_esfuerzo = merge(esfuerzo_calas, faenas_limpias, by = "id_faena", all = TRUE)
+
+  data_esfuerzo = data_esfuerzo[!duplicated(data_esfuerzo),]
+  data_esfuerzo = data_esfuerzo %>% dplyr::filter(dV <= max_dv,  dV >= min_dv)
+
+  return(data_esfuerzo)
+
+}
+
+
+# Uniendo descarga tallas -------------------------------------------------
+
+
+uniendo_descarga_tallas = function(descargas, tallas_viaje){
+
+  data_total = merge(descargas, tallas_viaje, by = c("id_faena","descarga","id_matricula"), all = TRUE)
+
+  data_total = data_total %>% dplyr::filter(!is.na(F_fin_desembarque)) %>% mutate(F_ini_desembarque = dmy_hm(substring(F_ini_desembarque,first = 1,last = 16)), F_fin_desembarque = dmy_hm(substring(F_fin_desembarque,first = 1,last = 16)), F_ini_descarga = dmy_hm(substring(F_ini_descarga,first = 1,last = 16)), F_fin_descarga = dmy_hm(substring(F_fin_descarga,first = 1,last = 16)))
+
+  return(data_total)
+
+
+}
+
+
+# Uniendo descarga esfuerzo -----------------------------------------------
+
+uniendo_descarga_esfuerzo = function(descargas_viajes, data_esfuerzo, difftime = 7, marcas = seq(5,20,0.5)){
+
+  descargas_viajes = merge(descargas_viajes, data_esfuerzo, by = "id_faena", all = TRUE) %>% dplyr::filter(!is.na(descarga))
+
+  descargas_viajes = descargas_viajes %>% mutate(fecha = ymd(format((F_ini_descarga - hours(difftime)), "%Y-%m-%d"))) %>% mutate_at(., as.character(marcas),function(x)as.numeric(as.character(x)))
+
+  descargas_viajes = addEsfuerzo(descargas_viajes)
+
+  descargas_viajes$tipo.de.flota = lanchas[match(descargas_viajes$id_matricula,lanchas$id_matricula),"TIPO.DE.CASCO"]
+
+  descargas_viajes = descargas_viajes %>% mutate(tipo.de.flota = ifelse(tipo.de.flota %in% "MADERA","IND MAD","IND"))
+
+  return(descargas_viajes)
+
+}
+
+
+# Variables espaciales ----------------------------------------------------
+
+generando_var_spaciales = function(data_total, dc_max = 100){
+
+  data_total = data_total[!duplicated(data_total[,c("id_faena")]),]
+
+  data_total = data_total %>% mutate(dc_pro = ifelse( dc_pro > dc_max , NA, dc_pro))
+
+  data_total = area_iso(data = data_total,colLon = match(x = "lon_end_pro",table = names(data_total)),colLat = match(x = "lat_end_pro",table = names(data_total)))
+
+  names(data_total) = c(names(data_total),"area_pro","lat_pro_cat","dc_pro_cat")
+
+  data_total = CorrigiendoPuertos(data = data_total)
+
+  return(data_total)
+
+}
 
 
 

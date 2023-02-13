@@ -129,8 +129,29 @@ area_iso = function(data, colLon, colLat){
 }
 
 
+# Corrigiendo Puertos -----------------------------------------------------
 
+CorrigiendoPuertos = function(data){
+  data$puerto[data$puerto == "carqu??n"] = "huacho"
+  data$puerto[data$puerto == "carquin"] = "huacho"
+  data$puerto[data$puerto == "Carquin"] = "huacho"
+  data$puerto[data$puerto == "Carquín"] = "huacho"
+  data$puerto[data$puerto == "carquín"] = "huacho"
 
+  data$puerto[data$puerto == "carquï¿½n"] = "huacho"
+  data$puerto[data$puerto == "Carquï¿½n"] = "huacho"
+  data$puerto[data$puerto == "carqu¡n"] = "huacho"
+  data$puerto[data$puerto == "Carqu¡n"] = "huacho"
+  data$puerto[data$puerto == "coishco"] = "chimbote"
+  data$puerto[data$puerto == "malabrigo"] = "chicama"
+  data$puerto[data$puerto == "paracas (pisco)"] = "pisco"
+  data$puerto[data$puerto == "bayovar"] = "parachique"
+  data$puerto[data$puerto == "pacocha"] = "ilo"
+  data$puerto[data$puerto == "matarani"] = "mollendo"
+  data$puerto[data$puerto == "Chimbote "] = "chimbote"
+  data$puerto[data$puerto == "chimbote "] = "chimbote"
+  return(data)
+}
 
 
 

@@ -41,8 +41,10 @@ tratar_calas = function(calas){
   calas = calas %>% dplyr::filter(minutes_lat < 60, seconds_lat < 60, minutes_lon < 60, seconds_lon < 60)
 
   calas$lat_end_pro = calas$grado_lat + calas$minutes_lat/60 + calas$seconds_lat/3600
+  calas$lat_end_pro = calas$lat_end_pro * -1
 
   calas$lon_end_pro = calas$grado_lon + calas$minutes_lon/60 + calas$seconds_lon/3600
+  calas$lon_end_pro = calas$lon_end_pro * -1
 
   calas = calas %>% dplyr::filter(gear %in% c("RED DE CERCO")) %>% select(id_faena, n_cala, start_date, end_date, lon_end_pro, lat_end_pro, description , gear, catch_kg, status)
 
