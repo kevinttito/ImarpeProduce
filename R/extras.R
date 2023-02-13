@@ -1,33 +1,4 @@
 
-# Distancia Costa ---------------------------------------------------------
-
-.shoreDistance = function(data) {
-
-  grados2mn  = 60 * 180 / pi
-  grados2rad = pi/180
-
-  shore_rad = Shoreline_Peru * grados2rad
-  x_rad = data[2] * grados2rad
-  y_rad = data[1] * grados2rad
-
-  xy_rad = sin(y_rad) * sin(shore_rad$Lat)
-  yx_rad = cos(y_rad) * cos(shore_rad$Lat) * cos(shore_rad$Long - x_rad)
-  dist = min(acos(xy_rad + yx_rad)) * grados2mn
-
-  return(dist)
-
-}
-
-
-# Removiendo espacios y letras --------------------------------------------
-
-removeSpace_Letter <- function(vector) {
-
-  out <- gsub(pattern = "[a-zA-Z-]", replacement = "", x = vector)
-  out <- str_replace_all(string = out, pattern = "\\p{WHITE_SPACE}", replacement = "")
-  return(out)
-
-}
 
 # Convert Longitud y Latitud ----------------------------------------------
 
@@ -59,37 +30,3 @@ obtener_solo_muestra = function(x, marcas = seq(5,20,0.5)){
 }
 
 
-# MCD 2 -------------------------------------------------------------------
-
-mcd2 = function (x, y) {
-  mayor = max(x, y)
-  menor = min(x, y)
-  r = mayor %% menor
-  if (!(x & y)) {
-    menor = mayor
-  } else {
-    while (r != 0) {
-      mayor = r
-      r = menor %% r
-      menor = mayor
-    }
-  }
-  return(abs(menor))
-}
-
-
-# MCD ---------------------------------------------------------------------
-
-mcd = function (...) {
-
-  numeros = c(...)
-  resultado = mcd2(numeros[1], numeros[2])
-  if (length(numeros) > 2) {
-    for(n in numeros[3:length(numeros)]) {
-      resultado = mcd2(resultado, n)
-    }
-  }
-
-  return(abs(resultado))
-
-}
