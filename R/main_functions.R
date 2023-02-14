@@ -168,11 +168,11 @@ ponderacion_by_row = function(data, tallas, a, b, colCatch){
 
 # Ponderar flota puerto ---------------------------------------------------
 
-pon_flota_puerto_new = function(data, tallas, a, b){
+pon_flota_puerto = function(data, tallas, a, b){
 
   aggregate_port = aggregate(x = data[,c("descarga","n","n_m",tallas)], by = list(fecha = data$fecha, puerto = data$puerto, tipo.de.flota = data$tipo.de.flota), FUN = sum, na.rm = TRUE)
 
-  aggregate_port = ponderacion_by_row(data = aggregate_port,tallas = tallas, a = a, b = b, colCatch = 1)
+  aggregate_port = ponderacion_by_row(data = aggregate_port,tallas = tallas, a = a, b = b, colCatch = 4)
 
   aggregate_port$puerto = tolower(aggregate_port$puerto)
   aggregate_port$tipo.de.flota = tolower(aggregate_port$tipo.de.flota)
