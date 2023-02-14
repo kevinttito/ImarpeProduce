@@ -118,7 +118,7 @@ uniendo_descarga_esfuerzo = function(descargas_viajes, data_esfuerzo, difftime =
     dplyr::mutate(fecha = lubridate::ymd(format((F_ini_descarga - lubridate::hours(difftime)), "%Y-%m-%d"))) %>%
     dplyr::mutate_at(., as.character(marcas),function(x)as.numeric(as.character(x)))
 
-  descargas_viajes = addEsfuerzo(descargas_viajes)
+  descargas_viajes = addEsfuerzo(descargas_viajes, tallas = marcas)
 
   descargas_viajes$tipo.de.flota = lanchas[match(descargas_viajes$id_matricula,lanchas$id_matricula),"TIPO.DE.CASCO"]
 

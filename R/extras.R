@@ -164,3 +164,14 @@ add_peso_juv_adulto = function(data, tallas){
 
 }
 
+
+# add Viaje ---------------------------------------------------------------
+
+addEsfuerzo = function(data, tallas){
+
+  data$n = 1
+  data$total = apply(data[as.character(tallas)],1,sum, na.rm = TRUE)
+  data$n_m = ifelse(data$total == 0, 0, 1)
+  return(data)
+
+}
