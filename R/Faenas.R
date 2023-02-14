@@ -26,7 +26,11 @@ ordenar_faenas = function(faenas){
 
   names(faenas) = c("armador","emb","matricula","punto_zarpe","f_ini_faena","f_fin_faena","id_faena","n_cala","status","origen","f_recorded")
 
-  faenas = faenas %>% mutate(f_ini_faena = dmy_hm(substring(f_ini_faena,first = 1,last = 16)), f_fin_faena = dmy_hm(substring(f_fin_faena,first = 1,last = 16)), dV = as.numeric(difftime(f_fin_faena,f_ini_faena, units = "hour"))) %>% select(f_ini_faena,f_fin_faena,id_faena, dV) %>% dplyr::filter(dV > 0, !is.na(dV))
+  faenas = faenas %>% mutate(f_ini_faena = lubridate::dmy_hm(substring(f_ini_faena,first = 1,last = 16)),
+                             f_fin_faena = lubridate::dmy_hm(substring(f_fin_faena,first = 1,last = 16)),
+                             dV = as.numeric(difftime(f_fin_faena,f_ini_faena, units = "hour"))) %>%
+    select(f_ini_faena,f_fin_faena,id_faena, dV) %>%
+    dplyr::filter(dV > 0, !is.na(dV))
 
   return(faenas)
 
