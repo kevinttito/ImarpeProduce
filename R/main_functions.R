@@ -67,6 +67,8 @@ filtrando_obteniendo_esfuerzo = function(calas_tallas_Total, descargas, min_dur_
 
   esfuerzo = Distancia_Costa(data = esfuerzo,colLon = match(x = "lon_end_pro",table = names(esfuerzo)),colLat = match(x = "lat_end_pro",table = names(esfuerzo)))
 
+  names(esfuerzo) = c(rev(rev(names(esfuerzo_total_calas))[-1]), "dc_pro")
+
   return(esfuerzo)
 
 }
