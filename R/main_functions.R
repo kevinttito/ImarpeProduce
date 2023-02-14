@@ -36,13 +36,24 @@ merge_callas_tallas = function(calas, tallas_calas){
 
 filtrando_obteniendo_esfuerzo = function(calas_tallas_Total, descargas, min_dur_calas, max_dur_calas){
 
-  tallas_lance = calas_tallas_Total %>% dplyr::filter(!is.na(start_date) & !is.na(end_date)) %>% mutate(fecha_start = dmy_hm(substring(start_date,first = 1,last = 16)), fecha_fin = dmy_hm(substring(end_date,first = 1,last = 16)), fecha_start = dmy_hm(substring(start_date,first = 1,last = 16)), dur_calas = as.numeric(difftime(fecha_fin,fecha_start,units = "hours")),description = ifelse(gsub("[  ]*","",description) %in% "",NA,gsub("[  ]*","",description))) %>% ungroup()
+  tallas_lance = calas_tallas_Total %>% dplyr::filter(!is.na(start_date) & !is.na(end_date)) %>%
+    mutate(fecha_start = lubridate::dmy_hm(substring(start_date,first = 1,last = 16)),
+           fecha_fin = lubridate::dmy_hm(substring(end_date,first = 1,last = 16)),
+           fecha_start = dmy_hm(substring(start_date,first = 1,last = 16)),
+           dur_calas = as.numeric(difftime(fecha_fin,fecha_start,units = "hours")),
+           description = ifelse(gsub("[  ]*","",description) %in% "",NA,gsub("[  ]*","",description))) %>%
+    ungroup()
 
 
-  calas_sp = tallas_lance %>% dplyr::group_by(id_faena) %>% dplyr::summarise(calas = max(n_cala), n_sp = length(which(!is.na(unique(description))))) %>% ungroup()
+  calas_sp = tallas_lance %>% dplyr::group_by(id_faena) %>%
+    dplyr::summarise(calas = max(n_cala), n_sp = length(which(!is.na(unique(description))))) %>%
+    ungroup()
 
 
-  dur_calas_total = tallas_lance %>% dplyr::filter(!is.na(dur_calas), dur_calas > min_dur_calas, dur_calas <= max_dur_calas, !duplicated(.[,c("id_faena","n_cala")])) %>% dplyr::group_by(id_faena) %>% dplyr::summarise(dur_calas = mean(as.numeric(dur_calas))) %>% ungroup()
+  dur_calas_total = tallas_lance %>% dplyr::filter(!is.na(dur_calas), dur_calas > min_dur_calas, dur_calas <= max_dur_calas, !duplicated(.[,c("id_faena","n_cala")])) %>%
+    dplyr::group_by(id_faena) %>%
+    dplyr::summarise(dur_calas = mean(as.numeric(dur_calas))) %>%
+    ungroup()
 
 
   position = tallas_lance %>% dplyr::group_by(id_faena) %>% dplyr::filter(n_cala %in% max(n_cala, na.rm = TRUE)) %>% select(id_faena, lon_end_pro,lat_end_pro) %>% ungroup()
@@ -83,7 +94,7 @@ uniendo_descarga_tallas = function(descargas, tallas_viaje){
 
   data_total = merge(descargas, tallas_viaje, by = c("id_faena","descarga","id_matricula"), all = TRUE)
 
-  data_total = data_total %>% dplyr::filter(!is.na(F_fin_desembarque)) %>% mutate(F_ini_desembarque = dmy_hm(substring(F_ini_desembarque,first = 1,last = 16)), F_fin_desembarque = dmy_hm(substring(F_fin_desembarque,first = 1,last = 16)), F_ini_descarga = dmy_hm(substring(F_ini_descarga,first = 1,last = 16)), F_fin_descarga = dmy_hm(substring(F_fin_descarga,first = 1,last = 16)))
+  data_total = data_total %>% dplyr::filter(!is.na(F_fin_desembarque)) %>% dplyr::mutate(F_ini_desembarque = lubridate::dmy_hm(substring(F_ini_desembarque,first = 1,last = 16)), F_fin_desembarque = lubridate::dmy_hm(substring(F_fin_desembarque,first = 1,last = 16)), F_ini_descarga = lubridate::dmy_hm(substring(F_ini_descarga,first = 1,last = 16)), F_fin_descarga = lubridate::dmy_hm(substring(F_fin_descarga,first = 1,last = 16)))
 
   return(data_total)
 
@@ -97,13 +108,13 @@ uniendo_descarga_esfuerzo = function(descargas_viajes, data_esfuerzo, difftime =
 
   descargas_viajes = merge(descargas_viajes, data_esfuerzo, by = "id_faena", all = TRUE) %>% dplyr::filter(!is.na(descarga))
 
-  descargas_viajes = descargas_viajes %>% mutate(fecha = ymd(format((F_ini_descarga - hours(difftime)), "%Y-%m-%d"))) %>% mutate_at(., as.character(marcas),function(x)as.numeric(as.character(x)))
+  descargas_viajes = descargas_viajes %>% dplyr::mutate(fecha = lubridate::ymd(format((F_ini_descarga - hours(difftime)), "%Y-%m-%d"))) %>% dplyr::mutate_at(., as.character(marcas),function(x)as.numeric(as.character(x)))
 
   descargas_viajes = addEsfuerzo(descargas_viajes)
 
   descargas_viajes$tipo.de.flota = lanchas[match(descargas_viajes$id_matricula,lanchas$id_matricula),"TIPO.DE.CASCO"]
 
-  descargas_viajes = descargas_viajes %>% mutate(tipo.de.flota = ifelse(tipo.de.flota %in% "MADERA","IND MAD","IND"))
+  descargas_viajes = descargas_viajes %>% dplyr::mutate(tipo.de.flota = ifelse(tipo.de.flota %in% "MADERA","IND MAD","IND"))
 
   return(descargas_viajes)
 
