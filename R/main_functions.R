@@ -36,7 +36,7 @@ merge_callas_tallas = function(calas, tallas_calas){
 
 filtrando_obteniendo_esfuerzo = function(calas_tallas_Total, descargas, min_dur_calas, max_dur_calas){
 
-  tallas_lance = calas_tallas_Total %>% dplyr::filter(!is.na(Fstart) & !is.na(Fend)) %>% mutate(fecha_start = dmy_hm(substring(Fstart,first = 1,last = 16)), fecha_fin = dmy_hm(substring(Fend,first = 1,last = 16)), fecha_start = dmy_hm(substring(Fstart,first = 1,last = 16)), dur_calas = as.numeric(difftime(fecha_fin,fecha_start,units = "hours")),description = ifelse(gsub("[  ]*","",description) %in% "",NA,gsub("[  ]*","",description))) %>% ungroup()
+  tallas_lance = calas_tallas_Total %>% dplyr::filter(!is.na(start_date) & !is.na(end_date)) %>% mutate(fecha_start = dmy_hm(substring(start_date,first = 1,last = 16)), fecha_fin = dmy_hm(substring(end_date,first = 1,last = 16)), fecha_start = dmy_hm(substring(start_date,first = 1,last = 16)), dur_calas = as.numeric(difftime(fecha_fin,fecha_start,units = "hours")),description = ifelse(gsub("[  ]*","",description) %in% "",NA,gsub("[  ]*","",description))) %>% ungroup()
 
 
   calas_sp = tallas_lance %>% dplyr::group_by(id_faena) %>% dplyr::summarise(calas = max(n_cala), n_sp = length(which(!is.na(unique(description))))) %>% ungroup()
