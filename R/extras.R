@@ -175,3 +175,16 @@ addEsfuerzo = function(data, tallas){
   return(data)
 
 }
+
+
+
+# Remover Colas -----------------------------------------------------------
+
+
+.removeTails = function(x) {
+  y = sign(abs(x))
+  r = rle(y)
+  if(r$value[1]==0 & r$length[1]>1) x = tail(x, -r$length[1]+1)
+  if(tail(r$value, 1)==0 & tail(r$length, 1)>1) x = head(x, -tail(r$length, 1)+1)
+  return(x)
+}

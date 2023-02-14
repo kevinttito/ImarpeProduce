@@ -151,3 +151,20 @@ generando_var_spaciales = function(data_total, dc_max = 100){
 
 
 
+# Ponderar flota puerto ---------------------------------------------------
+
+pon_flota_puerto_new = function(data, tallas, a, b){
+
+  aggregate_port = aggregate(x = data[,c("descarga","n","n_m",tallas)], by = list(fecha = data$fecha, puerto = data$puerto, tipo.de.flota = data$tipo.de.flota), FUN = sum, na.rm = TRUE)
+
+  aggregate_port = ponderacion_by_row(data = aggregate_port,tallas = tallas, a = a, b = b, colCatch = 1)
+
+  aggregate_port$puerto = tolower(aggregate_port$puerto)
+  aggregate_port$tipo.de.flota = tolower(aggregate_port$tipo.de.flota)
+
+  aggregate_port = aggregate_port %>% mutate(puerto = capitalize(puerto),
+                                                       puerto = ifelse(puerto == "Tambo de mora","Tambo de Mora",puerto))
+  return(aggregate_port)
+
+}
+
