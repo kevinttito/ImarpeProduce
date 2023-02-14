@@ -177,9 +177,49 @@ pon_flota_puerto = function(data, tallas, a, b){
   aggregate_port$puerto = tolower(aggregate_port$puerto)
   aggregate_port$tipo.de.flota = tolower(aggregate_port$tipo.de.flota)
 
-  aggregate_port = aggregate_port %>% mutate(puerto = Hmisc::capitalize(puerto),
-                                                       puerto = ifelse(puerto == "Tambo de mora","Tambo de Mora",puerto))
+  aggregate_port = aggregate_port %>%
+    mutate(puerto = Hmisc::capitalize(puerto),
+           puerto = ifelse(puerto == "Tambo de mora","Tambo de Mora",puerto))
   return(aggregate_port)
 
 }
+
+
+
+# Ponderar dia flota ------------------------------------------------------
+
+
+pond_dia_flota = function(data, tallas, a, b){
+
+  numero <- aggregate(x = data[,c("descarga","n","n_m",tallas)], by = list(fecha = data$fecha, tipo.de.flota = data$tipo.de.flota), FUN = sum, na.rm = TRUE)
+
+  numero = ponderacion_by_row(data = numero,tallas = tallas, a = a, b = b, colCatch = 3)
+
+  return(numero)
+}
+
+
+# Ponderar dia ------------------------------------------------------------
+
+
+pond_dia = function(data, tallas, a, b){
+
+  numero <- aggregate(x = data[,c("descarga","n","n_m",tallas)], by = list(fecha = data$fecha), FUN = sum, na.rm = TRUE)
+
+  numero = ponderacion_by_row(data = numero,tallas = tallas, a = a, b = b, colCatch = 2)
+
+  return(numero)
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
