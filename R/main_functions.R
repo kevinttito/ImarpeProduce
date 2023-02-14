@@ -59,6 +59,7 @@ filtrando_obteniendo_esfuerzo = function(calas_tallas_Total, descargas, min_dur_
     dplyr::filter(n_cala %in% max(n_cala, na.rm = TRUE)) %>%
     dplyr::select(id_faena, lon_end_pro,lat_end_pro) %>% ungroup()
 
+
   esfuerzo = merge(merge(calas_sp, position, by = "id_faena", all = TRUE), dur_calas_total, by = "id_faena", all = TRUE)
 
 
@@ -70,13 +71,6 @@ filtrando_obteniendo_esfuerzo = function(calas_tallas_Total, descargas, min_dur_
 
 }
 
-
-calas_tallas_Total %>% dplyr::filter(!is.na(Fstart) & !is.na(Fend)) %>%
-  mutate(fecha_start = dmy_hm(substring(Fstart,first = 1,last = 16)),
-         fecha_fin = dmy_hm(substring(Fend,first = 1,last = 16)),
-         fecha_start = dmy_hm(substring(Fstart,first = 1,last = 16)),
-         dur_calas = as.numeric(difftime(fecha_fin,fecha_start,units = "hours")),
-         description = ifelse(gsub("[  ]*","",description) %in% "",NA,gsub("[  ]*","",description))) %>% ungroup()
 
 # Get total efforts -------------------------------------------------------
 
