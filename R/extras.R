@@ -154,7 +154,13 @@ CorrigiendoPuertos = function(data){
 }
 
 
+# Peso Juvenil Adulto -----------------------------------------------------
 
+add_peso_juv_adulto = function(data, tallas){
 
+  data$juv_peso = apply(data[,as.character(tallas[tallas<12])],1,sum)
+  data$adu_peso = apply(data[,as.character(tallas[tallas>=12])],1,sum)
+  return(data)
 
+}
 
