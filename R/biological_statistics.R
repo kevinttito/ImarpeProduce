@@ -114,6 +114,8 @@ estadisticos <- function(data, tallas = seq(5,20,0.5)) {
   ### Talla Media
   data$Tmedia = apply(X = data[as.character(tallas)], MARGIN = 1, FUN = Talla_Media, talla = tallas)
 
+  suppressWarnings(data)
+
   return(data)
 
 }
