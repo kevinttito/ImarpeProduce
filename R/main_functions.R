@@ -39,7 +39,7 @@ filtrando_obteniendo_esfuerzo = function(calas_tallas_Total, descargas, min_dur_
   tallas_lance = calas_tallas_Total %>% dplyr::filter(!is.na(start_date) & !is.na(end_date)) %>%
     mutate(fecha_start = lubridate::dmy_hm(substring(start_date,first = 1,last = 16)),
            fecha_fin = lubridate::dmy_hm(substring(end_date,first = 1,last = 16)),
-           fecha_start = dmy_hm(substring(start_date,first = 1,last = 16)),
+           fecha_start = lubridate::dmy_hm(substring(start_date,first = 1,last = 16)),
            dur_calas = as.numeric(difftime(fecha_fin,fecha_start,units = "hours")),
            description = ifelse(gsub("[  ]*","",description) %in% "",NA,gsub("[  ]*","",description))) %>%
     ungroup()
@@ -94,7 +94,11 @@ uniendo_descarga_tallas = function(descargas, tallas_viaje){
 
   data_total = merge(descargas, tallas_viaje, by = c("id_faena","descarga","id_matricula"), all = TRUE)
 
-  data_total = data_total %>% dplyr::filter(!is.na(F_fin_desembarque)) %>% dplyr::mutate(F_ini_desembarque = lubridate::dmy_hm(substring(F_ini_desembarque,first = 1,last = 16)), F_fin_desembarque = lubridate::dmy_hm(substring(F_fin_desembarque,first = 1,last = 16)), F_ini_descarga = lubridate::dmy_hm(substring(F_ini_descarga,first = 1,last = 16)), F_fin_descarga = lubridate::dmy_hm(substring(F_fin_descarga,first = 1,last = 16)))
+  data_total = data_total %>% dplyr::filter(!is.na(F_fin_desembarque)) %>%
+    dplyr::mutate(F_ini_desembarque = lubridate::dmy_hm(substring(F_ini_desembarque,first = 1,last = 16)),
+                  F_fin_desembarque = lubridate::dmy_hm(substring(F_fin_desembarque,first = 1,last = 16)),
+                  F_ini_descarga = lubridate::dmy_hm(substring(F_ini_descarga,first = 1,last = 16)),
+                  F_fin_descarga = lubridate::dmy_hm(substring(F_fin_descarga,first = 1,last = 16)))
 
   return(data_total)
 
