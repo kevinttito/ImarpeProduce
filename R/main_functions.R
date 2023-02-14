@@ -65,11 +65,11 @@ filtrando_obteniendo_esfuerzo = function(calas_tallas_Total, descargas, min_dur_
 
   esfuerzo = esfuerzo[match(descargas$id_faena, esfuerzo$id_faena,nomatch = 0),]
 
-  esfuerzo = Distancia_Costa(data = esfuerzo,colLon = match(x = "lon_end_pro",table = names(esfuerzo)),colLat = match(x = "lat_end_pro",table = names(esfuerzo)))
+  esfuerzo_x = Distancia_Costa(data = esfuerzo,colLon = match(x = "lon_end_pro",table = names(esfuerzo)),colLat = match(x = "lat_end_pro",table = names(esfuerzo)))
 
-  names(esfuerzo) = c(rev(rev(names(esfuerzo_total_calas))[-1]), "dc_pro")
+  names(esfuerzo_x) = c(names(esfuerzo), "dc_pro")
 
-  return(esfuerzo)
+  return(esfuerzo_x)
 
 }
 
