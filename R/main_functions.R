@@ -115,7 +115,8 @@ uniendo_descarga_esfuerzo = function(descargas_viajes, data_esfuerzo, difftime =
   descargas_viajes = merge(descargas_viajes, data_esfuerzo, by = "id_faena", all = TRUE) %>% dplyr::filter(!is.na(descarga))
 
   descargas_viajes = descargas_viajes %>%
-    dplyr::mutate(fecha = lubridate::ymd(format((F_ini_descarga - hours(difftime)), "%Y-%m-%d"))) %>% dplyr::mutate_at(., as.character(marcas),function(x)as.numeric(as.character(x)))
+    dplyr::mutate(fecha = lubridate::ymd(format((F_ini_descarga - lubridate::hours(difftime)), "%Y-%m-%d"))) %>%
+    dplyr::mutate_at(., as.character(marcas),function(x)as.numeric(as.character(x)))
 
   descargas_viajes = addEsfuerzo(descargas_viajes)
 
