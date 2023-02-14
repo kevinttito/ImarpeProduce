@@ -118,7 +118,7 @@ area_iso = function(data, colLon, colLat){
   pt_S = sf::st_as_sf(new_data, coords = c("lon","lat"), crs = sf::st_crs(4326))
 
   xg = apply(sf::st_intersects(areas_isoparalitorales_polygon, pt_S, sparse = FALSE), 2,
-             function(col){as.numeric(polys[which(col)[1],c("area","grad","dc")])[1:3]})
+             function(col){as.numeric(areas_isoparalitorales_polygon[which(col)[1],c("area","grad","dc")])[1:3]})
 
   xg= as.data.frame(t(xg))
   names(xg) = c("area_iso","grad_cat","dc_cat")
