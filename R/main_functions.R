@@ -177,7 +177,7 @@ pon_flota_puerto = function(data, tallas, a, b){
   aggregate_port$puerto = tolower(aggregate_port$puerto)
   aggregate_port$tipo.de.flota = tolower(aggregate_port$tipo.de.flota)
 
-  aggregate_port = aggregate_port %>% mutate(puerto = capitalize(puerto),
+  aggregate_port = aggregate_port %>% mutate(puerto = Hmisc::capitalize(puerto),
                                                        puerto = ifelse(puerto == "Tambo de mora","Tambo de Mora",puerto))
   return(aggregate_port)
 
