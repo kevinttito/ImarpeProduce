@@ -157,7 +157,7 @@ ponderacion_by_row = function(data, tallas, a, b, colCatch){
   new_data = data[, c(names(data)[colCatch], as.character(tallas))]
   pesos = mapply(`*`, new_data[, as.character(tallas)], Length_weight(Length = tallas, a = a, b = b))
   FP = new_data[, 1]/apply(pesos, 1, sum, na.rm = TRUE)
-  tallas_ponderadas = new_data[, as.character(tallas)] * FP
+  tallas_ponderadas = new_data[, as.character(tallas)] * FP[[1]]
   out = data[, setdiff(names(data), tallas)]
   tallas_ponderadas = cbind(out, tallas_ponderadas)
 
