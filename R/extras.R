@@ -64,6 +64,7 @@ mcd = function (...) {
 
 }
 
+
 # Calcula Distancia Costa -------------------------------------------------
 
 
@@ -108,25 +109,32 @@ obtener_solo_muestra = function(x, marcas = seq(5,20,0.5)){
 # Determinar_areas --------------------------------------------------------
 
 
-area_iso = function(data, colLon, colLat){
+area_iso = function(data, colLat, colDC){
 
-  new_data = data[,c(colLon,colLat)]
-  names(new_data) = c("lon","lat")
+  new_data = data[,c(colLat,colDC)]
+  names(new_data) = c("lat","dc")
 
   new_data[is.na(new_data)] = 0
 
-  pt_S = sf::st_as_sf(new_data, coords = c("lon","lat"), crs = sf::st_crs(4326))
+  data$area = NA
+  data$grad_cat = NA
+  data$dc_cat = NA
 
-  xg = apply(sf::st_intersects(areas_isoparalitorales_polygon, pt_S, sparse = FALSE), 2,
-             function(col){as.numeric(areas_isoparalitorales_polygon[which(col)[1],c("area","grad","dc")])[1:3]})
+  for(i in 1:nrow(new_data)){
 
-  xg= as.data.frame(t(xg))
-  names(xg) = c("area_iso","grad_cat","dc_cat")
+    fg = areas_isoparalitorales[new_data$lat[i] >= -1*areas_isoparalitorales$grad & new_data$dc[i] < areas_isoparalitorales$dc,]
 
-  return(cbind(data,xg))
+    areas = subset(fg, subset = fg$grad %in% min(fg$grad) & fg$dc %in% min(fg$dc),select = c("area","grad","dc"))[1,]
+
+    data[i,c("area","grad_cat","dc_cat")] = areas
+
+  }
+
+  return(data)
 
 
 }
+
 
 
 # Corrigiendo Puertos -----------------------------------------------------
@@ -188,3 +196,8 @@ addEsfuerzo = function(data, tallas){
   if(tail(r$value, 1)==0 & tail(r$length, 1)>1) x = head(x, -tail(r$length, 1)+1)
   return(x)
 }
+
+
+
+
+

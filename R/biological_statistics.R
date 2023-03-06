@@ -31,7 +31,7 @@ Ponderacion <- function(frecuencia, captura, tallas, a, b) {
 # Convirtiendo de número a peso -------------------------------------------
 
 
-number_to_weight <- function(data, tallas, a, b, fileEncoding = "latin1"){
+number_to_weight <- function(data, tallas, a, b){
 
   peso <- as.data.frame(t(apply(data[, as.character(tallas)], 1 , function(x)Length_weight(Length = tallas,a = a,b = b)*x)))
   id <- setdiff(names(data), as.character(tallas))
