@@ -116,24 +116,30 @@ area_iso = function(data, colLat, colDC){
 
   new_data[is.na(new_data)] = 0
 
-  data$area = NA
-  data$grad_cat = NA
-  data$dc_cat = NA
+  areas = t(apply(new_data, 1, .Area_Iso))
 
-  for(i in 1:nrow(new_data)){
-
-    fg = areas_grados_dc[new_data$lat[i] >= -1*areas_grados_dc$grad & new_data$dc[i] < areas_grados_dc$dc,]
-
-    areas = subset(fg, subset = fg$grad %in% min(fg$grad) & fg$dc %in% min(fg$dc),select = c("area","grad","dc"))[1,]
-
-    data[i,c("area","grad_cat","dc_cat")] = areas
-
-  }
+  data = cbind(data, areas)
 
   return(data)
 
 
+
 }
+
+
+.Area_Iso = function(data){
+
+  lat = data[1]
+  dc = data[2]
+
+  dc_cat = min(areas_grados_dc[areas_grados_dc$dc > dc,]$dc)
+  grad_cat = min(areas_grados_dc[areas_grados_dc$grad > -1*lat,]$grad)
+  area = as.numeric(subset(areas_grados_dc, dc %in% dc_cat & grad %in% grad_cat))
+  names(area) = c("area_iso","grad_cat","dc_cat")
+  return(area)
+
+}
+
 
 
 
