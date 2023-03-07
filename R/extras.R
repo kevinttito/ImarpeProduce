@@ -122,7 +122,7 @@ area_iso = function(data, colLat, colDC){
 
   for(i in 1:nrow(new_data)){
 
-    fg = areas_isoparalitorales[new_data$lat[i] >= -1*areas_isoparalitorales$grad & new_data$dc[i] < areas_isoparalitorales$dc,]
+    fg = areas_grados_dc[new_data$lat[i] >= -1*areas_grados_dc$grad & new_data$dc[i] < areas_grados_dc$dc,]
 
     areas = subset(fg, subset = fg$grad %in% min(fg$grad) & fg$dc %in% min(fg$dc),select = c("area","grad","dc"))[1,]
 
