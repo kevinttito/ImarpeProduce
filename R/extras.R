@@ -77,11 +77,9 @@ Distancia_Costa = function(lat, lon) {
   x_rad = lon * grados2rad
   y_rad = lat * grados2rad
 
-
   xy_rad = lapply(y_rad, function(x) sin(x) * sin(shore_rad$Lat))
 
   yx_rad = Map(function(x, y) cos(x) * cos(shore_rad$Lat) * cos(shore_rad$Long - y), y_rad, x_rad)
-
 
   dist = unlist(Map(function(x, y) min(acos(x + y)) * grados2mn, xy_rad, yx_rad))
 

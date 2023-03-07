@@ -12,7 +12,7 @@ read_calas = function(path, pattern = ".csv",...) {
 
   names(tablas_calas) = c("id", "x1","id_faena","n_cala","start_date","x2","x3","end_date","start_lat","start_lon","end_lat","end_lon","gear","description","catch_kg","status","origin","record_date")
 
-  tablas_calas$description =  str_replace_all(string = tablas_calas$description,pattern = "\\p{WHITE_SPACE}",replacement = "")
+  tablas_calas$description =  stringr::str_replace_all(string = tablas_calas$description,pattern = "\\p{WHITE_SPACE}",replacement = "")
 
   tablas_calas = tablas_calas[,c("id_faena","n_cala","start_date","end_date","start_lat","start_lon","end_lat","end_lon","gear","description","catch_kg","status","origin","record_date")]
 
