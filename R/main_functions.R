@@ -138,13 +138,17 @@ generando_var_spaciales = function(data_total, dc_max = 100){
 
   data_total = data_total %>% mutate(dc_pro = ifelse( dc_pro > dc_max , NA, dc_pro))
 
-  data_total_x = area_iso(data = data_total,colLon = match(x = "lon_end_pro",table = names(data_total)),colLat = match(x = "lat_end_pro",table = names(data_total)))
+  areas = area_iso(lat = match(x = "lat_end_pro",table = names(data_total)),
+                          lon = match(x = "lon_end_pro",table = names(data_total)))
 
-  names(data_total_x) = c(names(data_total),"area_pro","lat_pro_cat","dc_pro_cat")
 
-  data_total_x = CorrigiendoPuertos(data = data_total_x)
+  names(areas) = c("area_pro","lat_pro_cat","dc_pro_cat")
 
-  return(data_total_x)
+  data_total = cbind(data_total, areas)
+
+  data_total = CorrigiendoPuertos(data = data_total)
+
+  return(data_total)
 
 }
 
