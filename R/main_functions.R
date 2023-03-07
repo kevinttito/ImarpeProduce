@@ -138,8 +138,8 @@ generando_var_spaciales = function(data_total, dc_max = 100){
 
   data_total = data_total %>% mutate(dc_pro = ifelse( dc_pro > dc_max , NA, dc_pro))
 
-  areas = area_iso(lat = match(x = "lat_end_pro",table = names(data_total)),
-                          lon = match(x = "lon_end_pro",table = names(data_total)))
+  areas = area_iso(lat = data_total[,match(x = "lat_end_pro",table = names(data_total))],
+                   lon = data_total[,match(x = "lon_end_pro",table = names(data_total))])
 
 
   names(areas) = c("area_pro","lat_pro_cat","dc_pro_cat")
