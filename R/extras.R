@@ -47,7 +47,7 @@ mcd = function (...) {
 
 # Distancia Costa ---------------------------------------------------------
 
-.shoreDistance = function(data) {
+.shoreDistance_un = function(data) {
 
   grados2mn  = 60 * 180 / pi
   grados2rad = pi/180
@@ -68,11 +68,24 @@ mcd = function (...) {
 # Calcula Distancia Costa -------------------------------------------------
 
 
-Distancia_Costa = function(data, colLon, colLat){
+Distancia_Costa = function(lat, lon) {
 
-  new_data = data[,c(colLat, colLon)]
-  data$dc = apply(new_data, 1, .shoreDistance)
-  return(data)
+  grados2mn  = 60 * 180 / pi
+  grados2rad = pi/180
+
+  shore_rad = Shoreline_Peru * grados2rad
+  x_rad = lon * grados2rad
+  y_rad = lat * grados2rad
+
+
+  xy_rad = lapply(y_rad, function(x) sin(x) * sin(shore_rad$Lat))
+
+  yx_rad = Map(function(x, y) cos(x) * cos(shore_rad$Lat) * cos(shore_rad$Long - y), y_rad, x_rad)
+
+
+  dist = unlist(Map(function(x, y) min(acos(x + y)) * grados2mn, xy_rad, yx_rad))
+
+  return(dist)
 
 }
 
@@ -109,37 +122,20 @@ obtener_solo_muestra = function(x, marcas = seq(5,20,0.5)){
 # Determinar_areas --------------------------------------------------------
 
 
-area_iso = function(data, colLat, colDC){
+area_iso = function(lat, dc){
 
-  new_data = data[,c(colLat,colDC)]
-  names(new_data) = c("lat","dc")
+  dc_cat = sapply(dc, function(x) min(subset(areas_grados_dc, dc > x, select = dc )))
 
-  new_data[is.na(new_data)] = 0
+  lat_cat = sapply(lat, function(x) max(subset(areas_grados_dc, grad < -1*x, select = grad )))
 
-  areas = t(apply(new_data, 1, .Area_Iso))
+  area = do.call("rbind",Map(function(x, y) subset(areas_grados_dc, dc %in% x & grad %in% y), dc_cat, lat_cat))
 
-  data = cbind(data, areas)
+  names(area) = c("area","lat_area","dc_area")
 
-  return(data)
-
+ return(area)
 
 
 }
-
-
-.Area_Iso = function(data){
-
-  lat = data[1]
-  dc = data[2]
-
-  dc_cat = min(areas_grados_dc[areas_grados_dc$dc > dc,]$dc)
-  grad_cat = min(areas_grados_dc[areas_grados_dc$grad > -1*lat,]$grad)
-  area = as.numeric(subset(areas_grados_dc, dc %in% dc_cat & grad %in% grad_cat))
-  names(area) = c("area_iso","grad_cat","dc_cat")
-  return(area)
-
-}
-
 
 
 
