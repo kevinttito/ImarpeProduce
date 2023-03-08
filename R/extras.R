@@ -135,7 +135,7 @@ area_iso = function(lat, dc){
 
   names(lat_dc) = c("area","lat_area","dc_area")
 
- return(area)
+ return(lat_dc)
 
 }
 
