@@ -121,9 +121,9 @@ obtener_solo_muestra = function(x, marcas = seq(5,20,0.5)){
 
 area_iso = function(lat, dc){
 
-  dc_cat = sapply(dc_cat, function(x) min(subset(areas_grados_dc, dc > x, select = dc )))
+  dc_cat = sapply(dc, function(x) min(subset(areas_grados_dc, dc > x, select = dc )))
 
-  lat_cat = sapply(lat_cat, function(x) max(subset(areas_grados_dc, grad < -1*x, select = grad )))
+  lat_cat = sapply(lat, function(x) max(subset(areas_grados_dc, grad < -1*x, select = grad )))
 
   lat_dc = data.frame(area = NA, dc_cat, lat_cat)
 
